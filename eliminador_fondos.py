@@ -23,4 +23,6 @@ eliminar = BackgroundRemover('input1','input2')
 print(f"Los valores de eliminar son {eliminar.input_folder} , {eliminar.output_folder}")
 
 eliminador = BackgroundRemover('input1.png','output1.png')
+print("Iniciando remoción de fondo...")
 eliminador.remove_background('images.png', 'mario_sinfondo.png')
+print("Fondo removido con éxito. Archivo guardado como 'mario_sinfondo.png'")
