@@ -18,7 +18,7 @@ class BackgroundRemover:
             output = remove(inp.read())
             outp.write(output)
         
-        
+         
 eliminar = BackgroundRemover('input1','input2')
 print(f"Los valores de eliminar son {eliminar.input_folder} , {eliminar.output_folder}")
 
