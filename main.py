@@ -19,7 +19,7 @@ def main(page: ft.Page):
         "Seleccionar Imagen",
         on_click=simple_click
     )
-    page.add(btn_simple)
+   
 
 
     btn_con_estilo = ft.ElevatedButton(
@@ -31,7 +31,27 @@ def main(page: ft.Page):
         height=50,
         icon=ft.Icons.ADD
     )
+
+    btn_profesional = ft.ElevatedButton(
+        bgcolor="#0f3460",
+        color="#ffffff",
+        width=250,
+        height=50,
+        style=ft.ButtonStyle(
+            shape=ft.RoundedRectangleBorder(radius=10)
+        ),
+        content=ft.Row(
+            [
+                ft.Text("Seleccionar Imagen", color="#ffffff", weight=ft.FontWeight.BOLD),
+                ft.Icon(ft.Icons.CLOUD_UPLOAD, color="#ffffff")
+            ],
+            alignment=ft.MainAxisAlignment.CENTER,
+        )
+    )
+    page.add(btn_simple)
     page.add(btn_con_estilo)
+    page.add(btn_profesional)
+   
     page.update()
 
 
