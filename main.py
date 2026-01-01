@@ -9,6 +9,29 @@ def main(page: ft.Page):
     page.window.width = 700
     page.theme_mode = ft.ThemeMode.DARK
     
+    
+    
+    output_folder_textfield =ft.TextField(
+        label="Carpeta de salida",
+        width=350,
+        height=60,
+        autofocus=False,
+        border_radius=10,
+        content_padding=ft.padding.all(15),
+        bgcolor="#16213e",
+        color="#ffffff",
+        border_color="#0f3460",
+        focused_border_color="#e94560",
+        #text_style=ft.TextStyle(color="#ffffff", size=14),
+        #label_style=ft.TextStyle(color="#a0a0a0", size=14),
+    )
+    
+    def _checkbox_changed(e:ft.ControlEvent):
+        output_folder_textfield.disabled = e.control.value
+        output_folder_textfield.bgcolor = "#2a2a40" if not e.control.value else "#16213e"
+        page.update()
+            
+        
 
     # def simple_click(e):
     #     print("Hola mundo")
@@ -59,10 +82,11 @@ def main(page: ft.Page):
     default_folder_check = ft.Checkbox(
         label="Usar carpeta predeterminada",
         value=False,
-        on_change=lambda e: print(f"Checkbox value: {e.control.value}"),
+        on_change=_checkbox_changed,
         check_color='#e94560',
         label_style=ft.TextStyle(color='#ffffff',size=14)
     )
+    
     select_files_info = ft.Text(
         "Ningun archivo seleccionado",
         color="#a0a0a0",
@@ -110,9 +134,29 @@ def main(page: ft.Page):
         elevation=5
     ),
 )
+    
+    button_remover = ft.ElevatedButton(
+        content=ft.Row([
+            ft.Icon(ft.icons.AUTO_FIX_HIGH, color="#ffffff"),
+            ft.Text("Remover Fondos", color="#ffffff", weight=ft.FontWeight.BOLD, size=10),
+        ], alignment=ft.MainAxisAlignment.CENTER),
+        on_click=lambda e: print("Removiendo fondos..."),
+        bgcolor="#e94560",
+        color="#ffffff",
+        width=300,
+        height=60,
+        style=ft.ButtonStyle(
+            shape=ft.RoundedRectangleBorder(radius=15),
+            elevation=5
+        ),
+        
+    )
+    
     page.add(default_folder_check)
-    page.add(select_files_info)
+    page.add(output_folder_textfield)
     page.add(bnt_pick_files)
+    page.add(select_files_info)
+    page.add(button_remover)
     page.update()
 
 ft.app(target=main)
