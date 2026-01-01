@@ -172,11 +172,47 @@ def main(page: ft.Page):
         width=600,
     )
     
-    page.add(config_card)     
-    page.add(bnt_pick_files)
-    page.add(select_files_info)
+    files_card =ft.Container(
+        content=ft.Column([
+            ft.Row([
+                ft.Icon(ft.icons.IMAGE, color="#e94560", size=20),
+                ft.Text("Configuracion", weight=ft.FontWeight.BOLD, color="#ffffff", size=16)
+            ],alignment=ft.MainAxisAlignment.START),
+            ft.Container(height=15),
+            ft.Row([
+                bnt_pick_files,    
+            ],alignment=ft.MainAxisAlignment.CENTER),
+            ft.Container(height=10),
+            select_files_info,
+        ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+        bgcolor="#16213e",
+        padding=ft.padding.all(15),
+        border_radius=15,
+        border=ft.border.all(1,"#0f3460"),
+        width=600,
+    )
     
-    page.add(button_remover)
+    process_card =ft.Container(
+        content=ft.Column([
+            ft.Row([
+                ft.Icon(ft.icons.PSYCHOLOGY, color="#e94560", size=20),
+                ft.Text("Configuracion", weight=ft.FontWeight.BOLD, color="#ffffff", size=16)
+            ],alignment=ft.MainAxisAlignment.START),
+            ft.Container(height=20),
+            button_remover,
+            ft.Container(height=15),
+        ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),
+        bgcolor="#16213e",
+        padding=ft.padding.all(15),
+        border_radius=15,
+        border=ft.border.all(1,"#0f3460"),
+        width=600,
+    )
+    
+    page.add(config_card)     
+    page.add(files_card)
+    page.add(process_card)
+    
     page.update()
 
 ft.app(target=main)
