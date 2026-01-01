@@ -152,10 +152,30 @@ def main(page: ft.Page):
         
     )
     
-    page.add(default_folder_check)
-    page.add(output_folder_textfield)
+    config_card =ft.Container(
+        content=ft.Column([
+            ft.Row([
+                ft.Icon(ft.icons.SETTINGS, color="#e94560", size=20),
+                ft.Text("Configuracion", weight=ft.FontWeight.BOLD, color="#ffffff", size=16)
+            ],alignment=ft.MainAxisAlignment.START),
+            ft.Container(height=10),
+            default_folder_check,
+            ft.Container(height=10),
+            output_folder_textfield,
+        ], spacing=5
+            
+        ),
+        bgcolor="#16213e",
+        padding=ft.padding.all(15),
+        border_radius=15,
+        border=ft.border.all(1,"#0f3460"),
+        width=600,
+    )
+    
+    page.add(config_card)     
     page.add(bnt_pick_files)
     page.add(select_files_info)
+    
     page.add(button_remover)
     page.update()
 
