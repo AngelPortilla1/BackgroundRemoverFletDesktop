@@ -55,6 +55,14 @@ def main(page: ft.Page):
    
     # page.update()
     
+    
+    default_folder_check = ft.Checkbox(
+        label="Usar carpeta predeterminada",
+        value=False,
+        on_change=lambda e: print(f"Checkbox value: {e.control.value}"),
+        check_color='#e94560',
+        label_style=ft.TextStyle(color='#ffffff',size=14)
+    )
     select_files_info = ft.Text(
         "Ningun archivo seleccionado",
         color="#a0a0a0",
@@ -102,7 +110,7 @@ def main(page: ft.Page):
         elevation=5
     ),
 )
-   
+    page.add(default_folder_check)
     page.add(select_files_info)
     page.add(bnt_pick_files)
     page.update()
