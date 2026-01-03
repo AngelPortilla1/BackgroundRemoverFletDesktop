@@ -23,11 +23,17 @@ class BackgroundRemover:
         
     
     def _remove_background(self, input_path, output_path):
+        with open(input_path, 'rb') as inp, open(out_path, 'wb') as outb:
+            output = remove(inp.read())
+            outb.write(ouput)
         
     
     
     def _move_original(self, input_path):
-        pass
-        
+        original_folder = self._processed_folder / "originals"
+        original_folder.mkdir()(exist_ok=True)
+        new_path = original_folder / input_path.name
+        input_path.rename(new_path)
+                
         
         
