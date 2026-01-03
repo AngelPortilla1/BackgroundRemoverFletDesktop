@@ -13,16 +13,19 @@ class BackgroundRemover:
         self.input_folder = input_folder
         self.output_folder = output_folder
         
-    def remove_background(self,input_folder,output_folder):
-        with open(input_folder, 'rb') as inp, open(output_folder,'wb') as outp:
-            output = remove(inp.read())
-            outp.write(output)
+    def process_images(self, filename_list,process_callback=None):
+        pass
+    
+    
+    def _is_supported_image(self, filename):
+        pass
+    
+    def _remove_background(self, input_path, output_path):
+        pass
+    
+    
+    def _move_original(self, input_path):
+        pass
         
-         
-eliminar = BackgroundRemover('input1','input2')
-print(f"Los valores de eliminar son {eliminar.input_folder} , {eliminar.output_folder}")
-
-eliminador = BackgroundRemover('input1.png','output1.png')
-print("Iniciando remoción de fondo...")
-eliminador.remove_background('images.png', 'mario_sinfondo.png')
-print("Fondo removido con éxito. Archivo guardado como 'mario_sinfondo.png'")
+        
+        
