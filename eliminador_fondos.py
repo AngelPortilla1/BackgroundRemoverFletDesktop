@@ -17,11 +17,13 @@ class BackgroundRemover:
         pass
     
     
-    def _is_supported_image(self, filename):
-        pass
+    def _is_supported_image(self, filename:str):
+        
+        return filename.lower().endswith.(self.SUPPORTED_EXTENSIONS)
+        
     
     def _remove_background(self, input_path, output_path):
-        pass
+        
     
     
     def _move_original(self, input_path):
