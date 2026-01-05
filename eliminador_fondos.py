@@ -30,8 +30,8 @@ class BackgroundRemover:
                 try : 
                     self._remove_background(input_path, output_path)
                     self._move_original(input_path)
-                except:
-                    print("Hay un error")
+                except Exception as e:
+                    print("Hay un error"+e)
                     
             
         
@@ -56,4 +56,4 @@ class BackgroundRemover:
         input_path.rename(new_path)
                 
         
-        
+obj = BackgroundRemover("images.png", "D:\Angel Fuhrer\Programacion\Proyectos\Proyectos 2025-2\AppFletDesktop\images.png")
