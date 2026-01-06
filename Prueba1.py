@@ -1,6 +1,6 @@
 import flet as ft
 import os
-from eliminador_fondos import BackgroundRemover
+from backgroundremover import BackgroundRemover
 
 def main(page: ft.Page):
     page.title = "Background Remover Pro"

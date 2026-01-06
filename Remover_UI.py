@@ -1,8 +1,9 @@
 import flet as ft
 import os
+from backgroundremover import BackgroundRemover
 
 
-class BackgroundRemover:
+class BackgroundRemoverApp:
     def __init__(self, page:ft.Page):
         self.page = page
         self.directory = None
@@ -79,7 +80,7 @@ class BackgroundRemover:
                 ft.Icon(ft.icons.AUTO_FIX_HIGH, color="#ffffff"),
                 ft.Text("Remover Fondos", color="#ffffff", weight=ft.FontWeight.BOLD, size=10),
             ], alignment=ft.MainAxisAlignment.CENTER),
-            on_click=lambda e: print("Removiendo fondos..."),
+            on_click=self._process_images_ui,
             bgcolor="#e94560",
             color="#ffffff",
             width=300,
@@ -93,6 +94,29 @@ class BackgroundRemover:
         self.page.overlay.append(self.file_picker)
     
     def _build_ui(self):
+        
+        tittle = ft.Container(
+            content = ft.Text(
+                "Background Remover Pro",
+                size =32,
+                weight=ft.FontWeight.BOLD,
+                color="#ffffff",
+                text_align=ft.TextAlign.CENTER
+            ),
+            alignment=ft.alignment.center,
+            padding=ft.padding.only(bottom=20)
+        )
+        subtittle = ft.Container(
+            content = ft.Text(
+                "Elimina fondo de imagenes de forma facil y sencilla",
+                size =16,
+                italic=True,
+                color="#ffffff",
+                text_align=ft.TextAlign.CENTER
+            )
+        )
+        
+        
         config_card = ft.Container(
             content=ft.Column([
                 ft.Row([
@@ -148,9 +172,13 @@ class BackgroundRemover:
         border=ft.border.all(1,"#0f3460"),
         width=600,
     )
+        
+        self.page.add(tittle)
+        self.page.add(subtittle)
         self.page.add(config_card)   
         self.page.add(files_card)
         self.page.add(process_card)
+        
 
     def _checkbox_changed(self,e:ft.ControlEvent):
         self.output_folder_textfield.disabled = e.control.value
@@ -163,9 +191,12 @@ class BackgroundRemover:
         if e.files : 
             file_count=len(e.files)
             first_file_path = e.files[0].path
-            directory = os.path.dirname(first_file_path)
+            self.directory = os.path.dirname(first_file_path)
             
-            self.select_files_info.value=f"{file_count} archivos seleccionados\nCarpeta: {directory}"
+            self.filename_list = [filename.name for filename in e.files]
+                
+            
+            self.select_files_info.value=f"{file_count} archivos seleccionados\nCarpeta: {self.directory}"
             self.select_files_info.color="#4caf50"
             self.select_files_info.size=16
         else:
@@ -174,8 +205,42 @@ class BackgroundRemover:
             self.select_files_info.size=14
         self.page.update()
 
+
+    def _process_images_ui(self,e:ft.ControlEvent):
+        try:
+            # Validar que haya archivos seleccionados
+            if not self.filename_list or self.directory is None:
+                self.select_files_info.value = "Por favor selecciona archivos primero"
+                self.select_files_info.color = "#f44336"
+                self.page.update()
+                return
+            
+            # Determinar carpeta de salida
+            if self.default_folder_check.value:
+                out_put_folder = os.path.join(os.getcwd(), "output")
+            else:
+                out_put_folder = (self.output_folder_textfield.value or "").strip()
+                if not out_put_folder:
+                    self.select_files_info.value = "Por favor ingresa una carpeta de salida válida"
+                    self.select_files_info.color = "#f44336"
+                    self.page.update()
+                    return
+            
+            remover = BackgroundRemover(self.directory, out_put_folder)
+            remover.process_images(self.filename_list)
+            
+            self.select_files_info.value = "¡Imágenes procesadas con éxito!"
+            self.select_files_info.color = "#4caf50"
+            self.page.update()
+        except Exception as error:
+            self.select_files_info.value = f"Error: {error}"
+            self.select_files_info.color = "#f44336"
+            self.page.update()
+            print(f"Error al procesar la imagen: {error}")
+            
+    
 def main(page: ft.Page):
-    obj = BackgroundRemover(page)
+    obj = BackgroundRemoverApp(page)
 
 ft.app(target=main)
 

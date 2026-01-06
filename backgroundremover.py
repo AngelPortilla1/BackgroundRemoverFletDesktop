@@ -11,8 +11,8 @@ class BackgroundRemover:
     
     def __init__(self, input_folder, output_folder):
         #Variables de instancia
-        self.input_folder = input_folder
-        self.output_folder = output_folder
+        self.input_folder = Path(input_folder)
+        self.output_folder = Path(output_folder)
         
     def process_images(self, filename_list,process_callback=None): #Output:/2026-12-01
         today_date = datetime.datetime.now().strftime('%Y-%m-%d_H-%M-%S')
@@ -34,8 +34,6 @@ class BackgroundRemover:
                     print(f"Hay un error: {e}")
                     
             
-        
-    
     
     def _is_supported_image(self, filename:str):
         
@@ -48,7 +46,6 @@ class BackgroundRemover:
             outb.write(output)
         
     
-    
     def _move_original(self, input_path):
         original_folder = self._processed_folder / "originals"
         original_folder.mkdir(parents=True, exist_ok=True)
@@ -57,4 +54,4 @@ class BackgroundRemover:
                 
         
 obj = BackgroundRemover(Path(r"D:\Angel Fuhrer\Programacion\Proyectos\Proyectos 2025-2\AppFletDesktop"), Path(r"D:\Angel Fuhrer\Programacion\Proyectos\Proyectos 2025-2\AppFletDesktop/output"))
-obj.process_images(['images.png'])
+obj.process_images(['Captura.PNG'])
