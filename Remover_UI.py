@@ -21,6 +21,8 @@ class BackgroundRemoverApp:
         self.page.theme_mode = ft.ThemeMode.DARK
     
     
+    
+    
     def _create_components(self):
         self.default_folder_check = ft.Checkbox(
             label="Usar carpeta predeterminada",
@@ -240,9 +242,7 @@ class BackgroundRemoverApp:
         try:
             # Validar que haya archivos seleccionados
             if not self.filename_list or self.directory is None:
-                self.select_files_info.value = "Por favor selecciona archivos primero"
-                self.select_files_info.color = "#f44336"
-                self.page.update()
+                self.show_error("Advertencia", "Por favor selecciona archivos primero")
                 return
             
             # Determinar carpeta de salida
@@ -251,21 +251,15 @@ class BackgroundRemoverApp:
             else:
                 out_put_folder = (self.output_folder_textfield.value or "").strip()
                 if not out_put_folder:
-                    self.select_files_info.value = "Por favor ingresa una carpeta de salida válida"
-                    self.select_files_info.color = "#f44336"
-                    self.page.update()
+                    self.show_error("Error", "Por favor ingresa una carpeta de salida válida")
                     return
             
             remover = BackgroundRemover(self.directory, out_put_folder)
             remover.process_images(self.filename_list, self._update_progress)
             
-            self.select_files_info.value = "¡Imágenes procesadas con éxito!"
-            self.select_files_info.color = "#4caf50"
-            self.page.update()
+            self.show_success("¡Éxito!", "¡Imágenes procesadas correctamente!")
         except Exception as error:
-            self.select_files_info.value = f"Error: {error}"
-            self.select_files_info.color = "#f44336"
-            self.page.update()
+            self.show_error("Error", f"Error al procesar: {str(error)}")
             print(f"Error al procesar la imagen: {error}")
         finally:
             # Asegurar que la UI se restablezca aunque ocurra un error
@@ -295,6 +289,48 @@ class BackgroundRemoverApp:
             self.page.update()
         except Exception as e:
             print(f"Error actualizando progreso: {e}")
+            
+            
+    def show_error(self, title: str, message: str):
+        """Muestra un diálogo de error"""
+        dialog = ft.AlertDialog(
+            title=ft.Text(title, color="#f44336", weight=ft.FontWeight.BOLD),
+            content=ft.Text(message, color="#ffffff", size=14),
+            actions=[
+                ft.TextButton(
+                    "Cerrar",
+                    on_click=lambda e: self._close_dialog(dialog)
+                )
+            ],
+            bgcolor="#16213e",
+            shape=ft.RoundedRectangleBorder(radius=10),
+        )
+        self.page.dialog = dialog
+        dialog.open = True
+        self.page.update()
+    
+    def show_success(self, title: str, message: str):
+        """Muestra un diálogo de éxito"""
+        dialog = ft.AlertDialog(
+            title=ft.Text(title, color="#4caf50", weight=ft.FontWeight.BOLD),
+            content=ft.Text(message, color="#ffffff", size=14),
+            actions=[
+                ft.TextButton(
+                    "Aceptar",
+                    on_click=lambda e: self._close_dialog(dialog)
+                )
+            ],
+            bgcolor="#16213e",
+            shape=ft.RoundedRectangleBorder(radius=10),
+        )
+        self.page.dialog = dialog
+        dialog.open = True
+        self.page.update()
+    
+    def _close_dialog(self, dialog):
+        """Cierra un diálogo"""
+        dialog.open = False
+        self.page.update()
     
 def main(page: ft.Page):
     obj = BackgroundRemoverApp(page)
