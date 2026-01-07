@@ -32,10 +32,13 @@ class BackgroundRemover:
                     self._move_original(input_path)
                     processed += 1
                     if progress_callback:
-                        progress_callback(processed,total_files,f"Error: {filename}")
+                        progress_callback(processed,total_files,filename)
                         
                 except Exception as e:
                     print(f"Hay un error: {e}")
+                    processed += 1
+                    if progress_callback:
+                        progress_callback(processed,total_files,f"Error: {filename}")
                     
             
     
