@@ -91,6 +91,23 @@ class BackgroundRemoverApp:
             ),
         
     )
+        
+        self.progress_bar = ft.ProgressBar(
+            width = 500,
+            visible = False,
+            color = "#e94560",
+            bgcolor= "#16213e",
+            height=8, 
+            
+        )
+        
+        self.progress_Text = ft.Text(
+            "",
+            visible = False,
+            color = "#ffffff",
+            size = 14,
+            text_align=ft.TextAlign.CENTER,
+        )
         self.page.overlay.append(self.file_picker)
     
     def _build_ui(self):
@@ -165,6 +182,9 @@ class BackgroundRemoverApp:
             ft.Container(height=20),
             self.button_remover,
             ft.Container(height=15),
+            self.progress_bar,
+            ft.Container(height=10),
+            self.progress_Text,
         ], horizontal_alignment=ft.CrossAxisAlignment.CENTER),
         bgcolor="#16213e",
         padding=ft.padding.all(15),
@@ -178,6 +198,7 @@ class BackgroundRemoverApp:
         self.page.add(config_card)   
         self.page.add(files_card)
         self.page.add(process_card)
+        
         
 
     def _checkbox_changed(self,e:ft.ControlEvent):
@@ -238,6 +259,13 @@ class BackgroundRemoverApp:
             self.page.update()
             print(f"Error al procesar la imagen: {error}")
             
+    
+    
+    def _update_progress(self,processed,total,current_file):
+        progress = processed / total
+        self.progress_bar.value = progress
+        self.progress_Text.value = f"Procesando {current_file} ({processed} de {total})"
+        self.page.update()
     
 def main(page: ft.Page):
     obj = BackgroundRemoverApp(page)
