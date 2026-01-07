@@ -14,7 +14,7 @@ class BackgroundRemover:
         self.input_folder = Path(input_folder)
         self.output_folder = Path(output_folder)
         
-    def process_images(self, filename_list,process_callback=None): #Output:/2026-12-01
+    def process_images(self, filename_list,progress_callback=None): #Output:/2026-12-01
         today_date = datetime.datetime.now().strftime('%Y-%m-%d_H-%M-%S')
         self._processed_folder= self.output_folder / today_date
         self._processed_folder.mkdir(parents = True, exist_ok = True)
@@ -27,9 +27,13 @@ class BackgroundRemover:
                 input_path = self.input_folder / filename #descargas/imagen1.png
                 output_path = self._processed_folder / filename
                 
-                try : 
+                try :   
                     self._remove_background(input_path, output_path)
                     self._move_original(input_path)
+                    processed += 1
+                    if progress_callback:
+                        progress_callback(processed,total_files,f"Error: {filename}")
+                        
                 except Exception as e:
                     print(f"Hay un error: {e}")
                     
@@ -53,5 +57,5 @@ class BackgroundRemover:
         input_path.rename(new_path)
                 
         
-obj = BackgroundRemover(Path(r"D:\Angel Fuhrer\Programacion\Proyectos\Proyectos 2025-2\AppFletDesktop"), Path(r"D:\Angel Fuhrer\Programacion\Proyectos\Proyectos 2025-2\AppFletDesktop/output"))
-obj.process_images(['Captura.PNG'])
+# obj = BackgroundRemover(Path(r"D:\Angel Fuhrer\Programacion\Proyectos\Proyectos 2025-2\AppFletDesktop"), Path(r"D:\Angel Fuhrer\Programacion\Proyectos\Proyectos 2025-2\AppFletDesktop/output"))
+# obj.process_images(['Captura.PNG'])

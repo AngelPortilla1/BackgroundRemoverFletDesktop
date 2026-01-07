@@ -228,6 +228,15 @@ class BackgroundRemoverApp:
 
 
     def _process_images_ui(self,e:ft.ControlEvent):
+        self.progress_bar.visible = True
+        self.progress_bar.value = 0
+        self.progress_Text.visible = True
+        self.progress_Text.value = "Iniciando proceso..."
+        self.progress_Text.color = "#ffffff"
+        self.button_remover.disabled=True
+        self.button_remover.bgcolor="#666666"
+        self.page.update()
+        
         try:
             # Validar que haya archivos seleccionados
             if not self.filename_list or self.directory is None:
@@ -248,7 +257,7 @@ class BackgroundRemoverApp:
                     return
             
             remover = BackgroundRemover(self.directory, out_put_folder)
-            remover.process_images(self.filename_list)
+            remover.process_images(self.filename_list, self._update_progress)
             
             self.select_files_info.value = "¡Imágenes procesadas con éxito!"
             self.select_files_info.color = "#4caf50"
@@ -258,14 +267,34 @@ class BackgroundRemoverApp:
             self.select_files_info.color = "#f44336"
             self.page.update()
             print(f"Error al procesar la imagen: {error}")
+        finally:
+            # Asegurar que la UI se restablezca aunque ocurra un error
+            try:
+                self.progress_bar.value = 1
+                self.progress_bar.visible = False
+                self.progress_Text.visible = False
+                self.button_remover.disabled = False
+                self.button_remover.bgcolor = "#e94560"
+                self.page.update()
+            except Exception:
+                pass
             
     
     
     def _update_progress(self,processed,total,current_file):
-        progress = processed / total
-        self.progress_bar.value = progress
-        self.progress_Text.value = f"Procesando {current_file} ({processed} de {total})"
-        self.page.update()
+        # Evitar división por cero y asegurar que el valor esté en el rango [0,1]
+        try:
+            if total and total > 0:
+                progress = processed / total
+            else:
+                progress = 0.0
+            progress = max(0.0, min(1.0, float(progress)))
+            self.progress_bar.value = progress
+            self.progress_Text.visible = True
+            self.progress_Text.value = f"Procesando {current_file} ({processed} de {total})"
+            self.page.update()
+        except Exception as e:
+            print(f"Error actualizando progreso: {e}")
     
 def main(page: ft.Page):
     obj = BackgroundRemoverApp(page)
